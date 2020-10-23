@@ -11,9 +11,9 @@ This repository demonstrates a practice project in the price forecasting field u
 
 #### 1.2 Notebooks
 
-The `EDA.ipynb` contains the explotary data analysis and data visualization.
+The [`EDA.ipynb`](https://github.com/lichunxiao9501/Crycurrency_Price_Forecasting_Kaggle_Project/blob/master/notebooks/EDA.ipynb) contains the explotary data analysis and data visualization.
 
-The `Price_Forecast.ipynb` contains the price forecast analysis for Bitcoin, in which I demonstrated three different models / approaches.
+The [`Price_Forecast.ipynb`](https://github.com/lichunxiao9501/Crycurrency_Price_Forecasting_Kaggle_Project/blob/master/notebooks/Price_Forecast.ipynb) contains the price forecast analysis for Bitcoin, in which I demonstrated three different models / approaches.
 * the time series model (ARIMA), 
 * the machine learning models (random forest, gradient boosting, xgboost), 
 * the deep learning model. 
