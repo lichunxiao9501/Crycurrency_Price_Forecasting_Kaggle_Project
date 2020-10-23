@@ -1,15 +1,25 @@
 # Crycurrency_Price_Forecasting_Kaggle_Project
 This repository demonstrates a practice project in the price forecasting field using data from a Kaggle dataset - Cryptocurrency Historical Prices.
 
-This project consists of 2 major parts: the price forecasting analysis notebook and the dash app. 
+### 1 File Documentation
 
-The price forecasting notebook demonstrates 3 different approaches: 
-* time series model (ARIMA), 
-* machine learning models (random forest, gradient boosting, xgboost), 
-* deep learning models. 
+#### 1.1 Folders
+
+[`dash`](https://github.com/lichunxiao9501/Crycurrency_Price_Forecasting_Kaggle_Project/tree/master/dash) folder: this folder contains the python scripts and assets for the dash app.
+
+[`notebooks`](https://github.com/lichunxiao9501/Crycurrency_Price_Forecasting_Kaggle_Project/tree/master/notebooks) folder: this folder contains two notebooks, `EDA.ipynb` and `Price_Forecast.ipynb`.
+
+#### 1.2 Notebooks
+
+The `EDA.ipynb` contains the explotary data analysis and data visualization.
+
+The `Price_Forecast.ipynb` contains the price forecast analysis for Bitcoin, in which I demonstrated three different models / approaches.
+* the time series model (ARIMA), 
+* the machine learning models (random forest, gradient boosting, xgboost), 
+* the deep learning model. 
 
 
-The dash app is coded in python and two screenshots are shown as follows.
+### 2 Dash App Screenshots
 
 Screenshot 1: Daily close price series of top 10 cryptocurrencies by market value
 ![](https://github.com/lichunxiao9501/Crycurrency_Price_Forecasting_Kaggle_Project/blob/master/pics/screenshot1.png)
