@@ -67,7 +67,17 @@ pie_fig.add_trace(go.Pie(
                      ),
                      )
 pie_fig.update_traces(marker=dict(line=dict(color='white', width=2)))
-pie_fig.update_layout(title='Cryptocurrency market share (%)')        
+pie_fig.update_layout(title='Cryptocurrency market share (%)',
+                        paper_bgcolor='rgba(0,0,0,0)',
+                        plot_bgcolor='rgba(0,0,0,0)',
+                #         legend=dict(
+                #                 orientation="h",
+                #                 yanchor="bottom",
+                #                 y=-1.5,
+                #                 xanchor="right",
+                #                 x=0
+                #   )
+)        
 
 df_top_10_cryptos = df[df.name.isin(top_10_cryptos)]
 ts_fig = px.line(x = df_top_10_cryptos.index, 
@@ -173,15 +183,14 @@ app.layout = html.Div([
                             ),
                             dcc.Graph(id='pie_graph')
                 ],
-                className="pretty_container four columns"),
+                className="pretty_container five columns"),
                 html.Div([
                     info_boxes,
                     html.Div(
                                 [
                                     dcc.Graph(id='ts_graph')
                                 ],
-                                id="countGraphContainer",
-                                className="pretty_container"
+                                className="pretty_container graphContainer"
                             )
                 ],
                 id="rightCol",
@@ -189,7 +198,41 @@ app.layout = html.Div([
                 ),
             ],
             className="row"
-        )
+        ),
+    html.Div([
+            html.Div([
+                        html.P('Select Cryptocurrency Types:', className="control_label"),
+                            
+                            dcc.Dropdown(
+                                            id='cryptos',
+                                            options=[{'label': x, 'value':x} for x in df.name.unique()],
+                                            value=top_10_cryptos, # default value
+                                            multi=True
+                                        ),
+                            html.Br(),
+
+                            html.P('Select Date Range:', className="control_label"),
+                            dcc.RangeSlider(
+                                                id='date_slider',
+                                                min=0,
+                                                max=n-1,
+                                                value=[0, n-1],
+                                                # marks=btc.date,
+                                            ),
+                    ],
+                    className='pretty_container three columns'),
+            html.Div([
+                        html.Div([dcc.Graph(id='cryptos_bar_graph')], className='pretty_container graphContainer')
+            ],
+
+            className='four columns'),
+            html.Div([
+                        html.Div([dcc.Graph(id='cryptos_graph')], className='pretty_container graphContainer')
+            ],
+
+            className='six columns')
+            ],
+            className='row')
     ],
     id="mainContainer",
     style={
@@ -244,6 +287,17 @@ def update_color(clickData, fig):
             new_ts_fig = candlestick_chart(df, labels[selection[0]], increasing_color = colors[selection[0]], decreasing_color = '#7F7F7F')
             return fig, new_ts_fig, labels[selection[0]]
     return pie_fig, ts_fig, '-'
+
+@app.callback([Output('cryptos_graph', 'figure'),
+              Output('cryptos_bar_graph', 'figure')],
+              [Input('cryptos', 'value'),
+              Input('date_slider', 'value')]
+              )
+def cryptos_figure(cryptos, date_slider):
+    start = date_dict[date_slider[0]]
+    end = date_dict[date_slider[1]]
+    fig1, fig2 = plot_cryptos(cryptos, start, end)
+    return fig1, fig2
 
 # Helper functions
 def plot_volume_and_price2(df, crypto, color, rolling_window = 1):
@@ -465,6 +519,49 @@ def candlestick_chart(df, crypto, increasing_color = '#17BECF', decreasing_color
 
     fig = go.Figure(data=data, layout=layout)
     return fig
+
+# def plot_cryptos(selected_cryptos, start, end):
+#     if selected_cryptos == top_10_cryptos:
+#         fig_title = 'Daily close price of top 10 cryptocurrencies'
+#     else:
+#         fig_title = 'Daily close price of selected cryptocurrencies'
+#     df_selected_cryptos = df[df.name.isin(selected_cryptos)&(df.index>=start)&(df.index<=end)]
+#     fig = px.line(x = df_selected_cryptos.index, y = df_selected_cryptos.close, color = df_selected_cryptos.name,
+#         labels = {'x':'Date','y':'Close Price','color':'Cryptocurrecy'},
+#         title = fig_title)
+#     fig.update_layout(paper_bgcolor='rgba(0,0,0,0)',
+#                       plot_bgcolor='rgba(0,0,0,0)'
+#                       )
+    
+#     return fig, bar_fig
+
+def plot_cryptos(selected_cryptos, start, end):
+    if selected_cryptos==top_10_cryptos:
+        fig_title = 'Daily close price of top 10 cryptocurrencies'
+    else:
+        fig_title = 'Daily close price of selected cryptocurrencies'
+    df_selected_cryptos = df[df.name.isin(selected_cryptos)&(df.index>=start)&(df.index<=end)]
+    fig = px.line(x = df_selected_cryptos.index, y = df_selected_cryptos.close, color = df_selected_cryptos.name,
+        labels = {'x':'Date','y':'Close Price','color':'Cryptocurrecy'},
+        title = fig_title)
+    fig.update_layout(paper_bgcolor='rgba(0,0,0,0)',
+                      plot_bgcolor='rgba(0,0,0,0)'
+                      )
+
+    # bar plot
+    color_dict = {x.name : x.line.color for x in fig.data}
+    current_market_selected_cryptos = current_market[current_market.name.isin(selected_cryptos)].copy()
+    current_market_selected_cryptos.sort_values('market', inplace=True)
+    bar_fig = px.bar(x = current_market_selected_cryptos.market, y = current_market_selected_cryptos.name, 
+        color = current_market_selected_cryptos.name, color_discrete_map=color_dict, 
+        orientation='h', 
+        labels = {'x':'2018 Market Value','y':'Cryptocurrecy','color':'Cryptocurrecy'},
+        title = 'Market Value')
+    bar_fig.update_layout(showlegend=False,
+                            paper_bgcolor='rgba(0,0,0,0)',
+                            plot_bgcolor='rgba(0,0,0,0)')
+
+    return fig, bar_fig
 
 # Main
 if __name__ == '__main__':
