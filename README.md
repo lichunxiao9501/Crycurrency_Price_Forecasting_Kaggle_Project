@@ -29,3 +29,6 @@ Screenshot 2: Moving average and bollinger band plot of selected cryptocurrecy (
 
 Screenshot 3: Moving average and bollinger band plot of selected cryptocurrecy (over selected time period)
 ![](https://github.com/lichunxiao9501/Crycurrency_Price_Forecasting_Kaggle_Project/blob/master/pics/screenshot3.png)
+
+Screenshot 4: Market value and time series plot of selected cryptocurrecy and selected time period
+![](https://github.com/lichunxiao9501/Crycurrency_Price_Forecasting_Kaggle_Project/blob/master/pics/screenshot4.png)
